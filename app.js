@@ -1,6 +1,10 @@
 var express = require('express')
 var app = express();
 var request = require('request');
+var bodyParser = require('body-parser');
+
+
+app.use(bodyParser.json());
 
 app.get('/authorize', function (req, res) {
 	var code = req.query.code;
@@ -21,6 +25,12 @@ app.get('/authorize', function (req, res) {
 
 });
 
+app.post('/events', function(req, res) {
+	var body = req.body;
+	console.log(body);
+	res.end();
+})
+
 //b8ec11e9245c386ccf31e15d536723baf292a939
 
 
@@ -30,6 +40,7 @@ app.get("/", function(req, res) {
 
 
 var port = process.env.PORT || 3000;
+console.log(port);
 app.listen(port, function () {
   console.log('Example app listening on port 3000!')
 });
