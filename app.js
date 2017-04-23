@@ -28,7 +28,7 @@ app.get('/authorize', function (req, res) {
 
 app.post('/events', function(req, res) {
 	var body = req.body;
-	
+	console.log(body);
 	res.end();
 })
 
