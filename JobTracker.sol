@@ -28,8 +28,9 @@ contract JobTracker is SafeMath {
     }
 
     function acceptWork (address _jobWorker, uint _amount) onlyJobCreator returns (bool) {
-        return Token(tokenContractAddress).transferFrom(jobCreator, _jobWorker, _amount);
+        Token(tokenContractAddress).approve(_jobWorker, _amount);
         Accept(_jobWorker, _amount);
+        return Token(tokenContractAddress).transfer(_jobWorker, _amount);
     }
 
     function payWorker (address _jobWorker) onlyJobCreator {
