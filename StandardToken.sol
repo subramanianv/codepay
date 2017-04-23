@@ -4,8 +4,9 @@ pragma solidity ^0.4.8;
 
 contract StandardToken is Token {
 
-    function StandardToken(uint _totalSupply) {
+    function StandardToken (uint _totalSupply) {
         balances[msg.sender] = _totalSupply;
+        totalSupply = _totalSupply;
     }
 
     function transfer(address _to, uint256 _value) returns (bool success) {
@@ -45,6 +46,10 @@ contract StandardToken is Token {
 
     function allowance(address _owner, address _spender) constant returns (uint256 remaining) {
       return allowed[_owner][_spender];
+    }
+
+    function totalBalance() constant returns (uint) {
+        return totalSupply;
     }
 
     mapping (address => uint256) balances;
