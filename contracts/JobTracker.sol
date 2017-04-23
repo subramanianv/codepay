@@ -31,8 +31,9 @@ contract JobTracker is SafeMath {
 
     function payWorker (address _jobWorker) onlyJobCreator {
         uint sendBalance = mul(this.balance, shareOf(_jobWorker));
+        sendBalance = div(sendBalance, 1000);
         token.transferFrom(_jobWorker, jobCreator, token.balanceOf(_jobWorker));
-        if(!this.send(sendBalance)) throw;
+        if(!_jobWorker.send(sendBalance)) throw;
     }
 
     function changeJobCreator (address _newJobCreator) onlyJobCreator {

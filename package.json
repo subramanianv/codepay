@@ -17,7 +17,8 @@
 },
     "scripts": {
         "dashboard": "watchify public/dashboard.js -o public/dist/dashboard.bundle.js",
-        "token": "watchify public/token.js -o public/dist/token.bundle.js"
+        "token": "watchify public/token.js -o public/dist/token.bundle.js",
+        "escrow" : "watchify public/escrow.js -o public/dist/escrow.bundle.js"
     },
   "author": "",
   "license": "ISC",

@@ -15,6 +15,10 @@ function storeContractAddress(id, address) {
 	jt.addTokenContract(id, address).then(console.log);
 }
 
+$(document).ready(function() {
+	$("#accountAddress").val(web3.eth.accounts[0].toString());
+});
+
 
 $("#_createToken").click(function(){
 	var _initialAmount = parseInt($("#_initialAmount").val());
@@ -23,7 +27,7 @@ $("#_createToken").click(function(){
 	var _tokenSymbol =  repoName.slice(2)/* var of type string here */ ;
 	var escrowAmount = parseInt($("#ether").val());
 	debugger;
-	StandardToken.new(_initialAmount, {gasPrice : 100000000000, gas : 4712388, from : web3.eth.accounts[0]}).
+	StandardToken.new(_initialAmount, {gas : 4712388, from : web3.eth.accounts[0]}).
 	then(function(_newToken) {
 		var address = _newToken.address;
 		console.log("Token Address", _newToken.address);
@@ -52,7 +56,12 @@ $("#_createToken").click(function(){
 		debugger;
 		return tokenInstance.balanceOf(web3.eth.accounts[0], {from : web3.eth.accounts[0]});
 	}).then(function(sb) {
-		
+		debugger;
+		console.log(web3.eth.getBalance(web3.eth.accounts[1]).toString());
+		return jtInstance.payWorker(web3.eth.accounts[1], {from : web3.eth.accounts[0]});
+	}).then(function() {
+		console.log(web3.eth.getBalance(jtInstance.address).toString());
+		console.log(web3.eth.getBalance(web3.eth.accounts[1]).toString());
 	});
 
 });

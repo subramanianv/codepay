@@ -1,0 +1,157 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Foundation for Sites</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.js"></script>
+	<script src="js/web3.js"></script>
+	<link rel="stylesheet" href="css/foundation.css">
+
+	<link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+	<div class="row">
+		<div class="large-offset-2 large-6 columns">
+			<h3 id="Account">Address</h3>
+			<br/>
+			<h3 id="eth"></h3>
+			<br/>
+			<h3 id="totalSupply"></h3>
+		</div>
+	</div>
+	<br/>
+	<div class="row">
+		<div class="large-offset-3 large-6 columns">
+			<table id="repos"></table>
+		</div>
+	</div>
+	<script src="js/vendor/jquery.js"></script>
+	<script src="js/vendor/what-input.js"></script>
+	<script src="js/vendor/foundation.js"></script>
+	<script src="js/app.js"></script>
+
+	<script>
+		var debug = console.log;
+		var count = 0;
+
+		/**
+		 * Noop function.
+		 */
+
+		function noop() {}
+
+		/**
+		 * JSONP handler
+		 *
+		 * Options:
+		 *  - param {String} qs parameter (`callback`)
+		 *  - prefix {String} qs parameter (`__jp`)
+		 *  - name {String} qs parameter (`prefix` + incr)
+		 *  - timeout {Number} how long after a timeout error is emitted (`60000`)
+		 *
+		 * @param {String} url
+		 * @param {Object|Function} optional options / callback
+		 * @param {Function} optional callback
+		 */
+
+		function jsonp(url, opts, fn) {
+			if ('function' == typeof opts) {
+				fn = opts;
+				opts = {};
+			}
+			if (!opts) opts = {};
+
+			var prefix = opts.prefix || '__jp';
+
+			// use the callback name that was passed if one was provided.
+			// otherwise generate a unique name by incrementing our counter.
+			var id = opts.name || (prefix + (count++));
+
+			var param = opts.param || 'callback';
+			var timeout = null != opts.timeout ? opts.timeout : 60000;
+			var enc = encodeURIComponent;
+			var target = document.getElementsByTagName('script')[0] || document.head;
+			var script;
+			var timer;
+
+
+			if (timeout) {
+				timer = setTimeout(function() {
+					cleanup();
+					if (fn) fn(new Error('Timeout'));
+				}, timeout);
+			}
+
+			function cleanup() {
+				if (script.parentNode) script.parentNode.removeChild(script);
+				window[id] = noop;
+				if (timer) clearTimeout(timer);
+			}
+
+			function cancel() {
+				if (window[id]) {
+					cleanup();
+				}
+			}
+
+			window[id] = function(data) {
+				debug('jsonp got', data);
+				cleanup();
+				if (fn) fn(null, data);
+			};
+
+			// add qs component
+			url += (~url.indexOf('?') ? '&' : '?') + param + '=' + enc(id);
+			url = url.replace('?&', '?');
+
+			debug('jsonp req "%s"', url);
+
+			// create script
+			script = document.createElement('script');
+			script.src = url;
+			target.parentNode.insertBefore(script, target);
+
+			return cancel;
+		}
+
+		function getRepos(accessToken, callback) {
+			var url = "https://api.github.com/user/repos?type=owned&access_token=" + accessToken;
+			jsonp(url, callback);
+		}
+
+		function showRepos(error, response) {
+			var repos = response.data;
+			var repoNames = [];
+			for (var i = 0; i < repos.length; i++) {
+				repoNames.push({id : repos[i].id, name : repos[i].name});
+			}
+
+			var template = '<thead><tr><th width="400">Repo</th><th>Token Address</th></thead><tbody>{{#repos}}<tr><td><b>{{name}}</b></td><td><a href="token.html?id={{id}}&name={{name}}">Create token</a></td>{{/repos}}</tbody>'
+			document.getElementById("repos").innerHTML = Mustache.render(template, {repos : repoNames});
+		}
+
+		function getCookie(cname) {
+			var name = cname + "=";
+			var decodedCookie = decodeURIComponent(document.cookie);
+			var ca = decodedCookie.split(';');
+			for (var i = 0; i < ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ') {
+					c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+					return c.substring(name.length, c.length);
+				}
+			}
+			return "";
+		}
+		var accessToken = getCookie("accessToken");
+	</script>
+	<script src = "dist/escrow.bundle.js"></script>
+</body>
+
+</html>

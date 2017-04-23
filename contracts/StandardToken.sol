@@ -3,7 +3,7 @@ pragma solidity ^0.4.4;
 
 
 contract StandardToken {
-    uint totalSupply;
+    uint public totalSupply;
     function StandardToken (uint _totalSupply) {
         balances[msg.sender] = _totalSupply;
         totalSupply = _totalSupply;

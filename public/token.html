@@ -19,16 +19,12 @@
 					<br /><br />
 					<label class="ui label">Selected Account</label>
 					<input type="text" id="accountAddress" class="ui input" placeholder="0" />
-					<label class="ui label">Current Balance of the account</label>
-					<input type="number" id="accountBalance" class="ui input" placeholder="1000" />
 					<br/>
 					<label class="ui label">Ether</label>
-					<input type="number" id="ether" class="ui input" placeholder="1000" />
+					<input type="number" id="ether" class="ui input" placeholder="Enter ether" />
 					<button id="_createToken" class="ui button blue">Create New Token</button>
 	  				<p id="newTokenResponse_body"></p>
 					<hr class="ui hidden divider" />
-
-
 
 		</div>
 
@@ -47,20 +43,6 @@ return vars;
 	var qs = getUrlVars();
 	var repoName = qs['name'];
 	document.getElementById('repoName').innerHTML = repoName;
-<<<<<<< HEAD
-	var Web3 = require('web3');
-    var web3 = new Web3();
-	web3.setProvider(new web3.providers.HttpProvider());
-	$(document).ready(function() {
-		$("#accountAddress").val(web3.eth.accounts[0].toString());
-		$("#ether").val(web3.eth.getBalance(web3.eth.accounts[0]).toNumber());
-=======
-
-	$(document).ready(function() {
-		// $("#accountAddress").val(web3.eth.accounts[0].toString());
-		// $("#ether").val(web3.eth.getBalance(web3.eth.accounts[0]).toNumber());
->>>>>>> x
-	});
 	</script>
 	<script src="dist/token.bundle.js"></script>
 	</body>
