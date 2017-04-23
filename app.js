@@ -3,7 +3,6 @@ var app = express();
 var request = require('request');
 var bodyParser = require('body-parser');
 var path = require("path")
-
 app.use(bodyParser.json());
 
 app.get('/authorize', function (req, res) {
@@ -25,9 +24,6 @@ app.get('/authorize', function (req, res) {
 		var x = '<html><head>' + s + '</head><body></body></html>'
 		res.end(x);
 	});
-
-
-
 });
 
 app.post('/events', function(req, res) {
@@ -36,15 +32,13 @@ app.post('/events', function(req, res) {
 	res.end();
 })
 
-//b8ec11e9245c386ccf31e15d536723baf292a939
-
 
 app.get("/", function(req, res) {
 	res.json("hello world");
+
 });
 
 app.use('/public', express.static(path.join(__dirname, 'public')))
-
 
 var port = process.env.PORT || 3000;
 console.log(port);
