@@ -1,6 +1,7 @@
 pragma solidity ^0.4.8;
 
 contract SafeMath {
+    //solidity
     function mul(uint a, uint b) internal returns (uint) {
         uint c = a * b;
         assert(a == 0 || c / a == b);
