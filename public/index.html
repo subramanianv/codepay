@@ -1,0 +1,32 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foundation for Sites</title>
+    <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="css/app.css">
+  </head>
+  <body>
+    <div class="row">
+      <div class="large-offset-2 large-6 columns">
+        <h1>Welcome to CodePay</h1>
+      </div>
+    </div>
+<br/>
+    <div class="row">
+      <div class="large-offset-3 large-6 columns">
+		  <a id="loginButton" class="button">Login to github</a>
+	  </div>
+  </div>
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/what-input.js"></script>
+    <script src="js/vendor/foundation.js"></script>
+    <script src="js/app.js"></script>
+	<script>
+		var login = document.getElementById("loginButton");
+		login.href = "https://github.com/login/oauth/authorize?client_id=79a74ecd4f74e041ef36&redirect_uri=http%3A%2F%2F127.0.0.1%3A3000%2Fauthorize&state=1001&scope=user%20user%3Aemail%20user%3Afollow%20public_repo%20repo%20read%3Arepo_hook%20write%3Arepo_hook%20admin%3Arepo_hook";
+	</script>
+  </body>
+</html>

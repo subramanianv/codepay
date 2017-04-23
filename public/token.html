@@ -1,0 +1,60 @@
+<html>
+	<head>
+		<script type="text/javascript" src="js/web3.js"></script>
+		<script type="text/javascript" src="js/jquery-2.2.2.min.js"></script>
+		<script type="text/javascript" src="js/semantic.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="js/semantic.min.css">
+	</head>
+
+	<body>
+		<div class="ui container form">
+					<hr class="ui hidden divider" />
+
+					<h2 id="repoName" class="ui aligned header"></h2>
+					<br />
+					<br />
+					<label class="ui label">Total Supply</label>
+					<input type="number" id="_initialAmount" class="ui input" placeholder="1000" />
+
+					<br /><br />
+					<label class="ui label">Selected Account</label>
+					<input type="text" id="accountAddress" class="ui input" placeholder="0" />
+					<label class="ui label">Current Balance of the account</label>
+					<input type="number" id="accountBalance" class="ui input" placeholder="1000" />
+					<br/>
+					<label class="ui label">Ether</label>
+					<input type="number" id="ether" class="ui input" placeholder="1000" />
+					<button id="_createToken" class="ui button blue">Create New Token</button>
+	  				<p id="newTokenResponse_body"></p>
+					<hr class="ui hidden divider" />
+
+
+
+		</div>
+
+		<script type="text/javascript">
+		function getUrlVars()
+{
+var vars = {}, hash;
+var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+for(var i = 0; i < hashes.length; i++)
+{
+	hash = hashes[i].split('=');
+	vars[hash[0]] = hash[1];
+}
+return vars;
+}
+	var qs = getUrlVars();
+	var repoName = qs['name'];
+	document.getElementById('repoName').innerHTML = repoName;
+	var Web3 = require('web3');
+    var web3 = new Web3();
+	web3.setProvider(new web3.providers.HttpProvider());
+	$(document).ready(function() {
+		$("#accountAddress").val(web3.eth.accounts[0].toString());
+		$("#ether").val(web3.eth.getBalance(web3.eth.accounts[0]).toNumber());
+	});
+	</script>
+	<script src="dist/token.bundle.js"></script>
+	</body>
+</html>

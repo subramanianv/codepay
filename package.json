@@ -6,6 +6,14 @@
   "scripts": {
     "test": "echo \"Eror: no test specified\" && exit 1"
   },
+  "devDependencies": {
+    "browserify": "^13.1.0",
+    "watchify": "^3.7.0"
+},
+    "scripts": {
+        "dashboard": "watchify public/dashboard.js -o public/dist/dashboard.bundle.js",
+        "token": "watchify public/token.js -o public/dist/token.bundle.js"
+    },
   "author": "",
   "license": "ISC",
   "dependencies": {
