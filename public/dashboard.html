@@ -125,6 +125,7 @@
 			for (var i = 0; i < repos.length; i++) {
 				repoNames.push({id : repos[i].id, name : repos[i].name});
 			}
+
 			var template = '<thead><tr><th width="400">Repo</th><th>Token Address</th></thead><tbody>{{#repos}}<tr><td><b>{{name}}</b></td><td><a href="token.html?id={{id}}&name={{name}}">Create token</a></td>{{/repos}}</tbody>'
 			document.getElementById("repos").innerHTML = Mustache.render(template, {repos : repoNames});
 		}
@@ -145,10 +146,8 @@
 			return "";
 		}
 		var accessToken = getCookie("accessToken");
-		getRepos(accessToken, showRepos);
 	</script>
-	<script>
-	</script>
+	<script src = "dist/dashboard.bundle.js"></script>
 </body>
 
 </html>
