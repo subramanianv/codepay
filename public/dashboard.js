@@ -2,20 +2,18 @@ var Web3 = require('web3');
 var web3 = new Web3();
 debugger;
 web3.setProvider(new web3.providers.HttpProvider());
-var JobTracker = require('./../build/contracts/JobTracker.sol');
+var JobRegistration = require('./../build/contracts/JobRegistration.sol');
 
-JobTracker.setProvider(web3.currentProvider);
-var jt = JobTracker.deployed();
+JobRegistration.setProvider(web3.currentProvider);
+var jr = JobRegistration.deployed();
 
-// JobTracker.then(function(JobTrackerInstance) {
-// 	getRepos(accessToken, showRepos);
-// });
+
 
 function showRepos(error, response) {
 	var repos = response.data;
 	var repoNames = [];
 	for (var i = 0; i < repos.length; i++) {
-		jt.getContractAddress(repos[i].id).then(console.log);
+
 		repoNames.push({id : repos[i].id, name : repos[i].name});
 	}
 
