@@ -232,13 +232,21 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.new = function() {
     if (this.currentProvider == null) {
+<<<<<<< HEAD
       throw new Error("JobTracker error: Please call setProvider() first before calling new().");
+=======
+      throw new Error("JobRegistration error: Please call setProvider() first before calling new().");
+>>>>>>> x
     }
 
     var args = Array.prototype.slice.call(arguments);
 
     if (!this.unlinked_binary) {
+<<<<<<< HEAD
       throw new Error("JobTracker error: contract binary not set. Can't deploy new instance.");
+=======
+      throw new Error("JobRegistration error: contract binary not set. Can't deploy new instance.");
+>>>>>>> x
     }
 
     var regex = /__[^_]+_+/g;
@@ -257,7 +265,11 @@ var SolidityEvent = require("web3/lib/web3/event.js");
         return name != arr[index + 1];
       }).join(", ");
 
+<<<<<<< HEAD
       throw new Error("JobTracker contains unresolved libraries. You must deploy and link the following libraries before you can deploy a new version of JobTracker: " + unlinked_libraries);
+=======
+      throw new Error("JobRegistration contains unresolved libraries. You must deploy and link the following libraries before you can deploy a new version of JobRegistration: " + unlinked_libraries);
+>>>>>>> x
     }
 
     var self = this;
@@ -298,7 +310,11 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.at = function(address) {
     if (address == null || typeof address != "string" || address.length != 42) {
+<<<<<<< HEAD
       throw new Error("Invalid address passed to JobTracker.at(): " + address);
+=======
+      throw new Error("Invalid address passed to JobRegistration.at(): " + address);
+>>>>>>> x
     }
 
     var contract_class = this.web3.eth.contract(this.abi);
@@ -309,7 +325,11 @@ var SolidityEvent = require("web3/lib/web3/event.js");
 
   Contract.deployed = function() {
     if (!this.address) {
+<<<<<<< HEAD
       throw new Error("Cannot find deployed address: JobTracker not deployed or address not set.");
+=======
+      throw new Error("Cannot find deployed address: JobRegistration not deployed or address not set.");
+>>>>>>> x
     }
 
     return this.at(this.address);
@@ -351,11 +371,16 @@ var SolidityEvent = require("web3/lib/web3/event.js");
   "default": {
     "abi": [
       {
+<<<<<<< HEAD
         "constant": false,
+=======
+        "constant": true,
+>>>>>>> x
         "inputs": [
           {
             "name": "id",
             "type": "uint256"
+<<<<<<< HEAD
           },
           {
             "name": "tokenContractAddress",
@@ -369,10 +394,27 @@ var SolidityEvent = require("web3/lib/web3/event.js");
       },
       {
         "constant": true,
+=======
+          }
+        ],
+        "name": "getJobTracker",
+        "outputs": [
+          {
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "payable": false,
+        "type": "function"
+      },
+      {
+        "constant": false,
+>>>>>>> x
         "inputs": [
           {
             "name": "id",
             "type": "uint256"
+<<<<<<< HEAD
           }
         ],
         "name": "getContractAddress",
@@ -395,6 +437,25 @@ var SolidityEvent = require("web3/lib/web3/event.js");
     "updated_at": 1492908507914,
     "links": {},
     "address": "0x24e8911e0056d254a1d09a0c5c7c571dd3bebcd1"
+=======
+          },
+          {
+            "name": "_jt",
+            "type": "address"
+          }
+        ],
+        "name": "addJobTracker",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+      }
+    ],
+    "unlinked_binary": "0x606060405260ab8060106000396000f3606060405260e060020a60003504630c90b2a6811460265780639b561803146064575b6002565b346002576004356000908152602081815260409182902054825173ffffffffffffffffffffffffffffffffffffffff90911681529151918290030190f35b346002576004356000908152602081905260409020805473ffffffffffffffffffffffffffffffffffffffff19166c0100000000000000000000000060243581020417905500",
+    "events": {},
+    "updated_at": 1492935992972,
+    "links": {},
+    "address": "0x0fbba04dbf08e9ae2d7d33d6aee6f98f1a36caad"
+>>>>>>> x
   }
 };
 
@@ -479,7 +540,11 @@ var SolidityEvent = require("web3/lib/web3/event.js");
     Contract.links[name] = address;
   };
 
+<<<<<<< HEAD
   Contract.contract_name   = Contract.prototype.contract_name   = "JobTracker";
+=======
+  Contract.contract_name   = Contract.prototype.contract_name   = "JobRegistration";
+>>>>>>> x
   Contract.generated_with  = Contract.prototype.generated_with  = "3.2.0";
 
   // Allow people to opt-in to breaking changes now.
@@ -519,7 +584,11 @@ var SolidityEvent = require("web3/lib/web3/event.js");
   } else {
     // There will only be one version of this contract in the browser,
     // and we can use that.
+<<<<<<< HEAD
     window.JobTracker = Contract;
+=======
+    window.JobRegistration = Contract;
+>>>>>>> x
   }
 })();
 
@@ -37830,6 +37899,7 @@ var Web3 = require('web3');
 var web3 = new Web3();
 debugger;
 web3.setProvider(new web3.providers.HttpProvider());
+<<<<<<< HEAD
 var JobTracker = require('./../build/contracts/JobTracker.sol');
 
 JobTracker.setProvider(web3.currentProvider);
@@ -37838,12 +37908,24 @@ var jt = JobTracker.deployed();
 // JobTracker.then(function(JobTrackerInstance) {
 // 	getRepos(accessToken, showRepos);
 // });
+=======
+var JobRegistration = require('./../build/contracts/JobRegistration.sol');
+
+JobRegistration.setProvider(web3.currentProvider);
+var jr = JobRegistration.deployed();
+
+
+>>>>>>> x
 
 function showRepos(error, response) {
 	var repos = response.data;
 	var repoNames = [];
 	for (var i = 0; i < repos.length; i++) {
+<<<<<<< HEAD
 		jt.getContractAddress(repos[i].id).then(console.log);
+=======
+
+>>>>>>> x
 		repoNames.push({id : repos[i].id, name : repos[i].name});
 	}
 
@@ -37853,4 +37935,8 @@ function showRepos(error, response) {
 
 getRepos(accessToken, showRepos);
 
+<<<<<<< HEAD
 },{"./../build/contracts/JobTracker.sol":1,"web3":176}]},{},[226]);
+=======
+},{"./../build/contracts/JobRegistration.sol":1,"web3":176}]},{},[226]);
+>>>>>>> x

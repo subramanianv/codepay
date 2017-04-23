@@ -1,3 +1,3 @@
 module.exports = function(deployer) {
-  deployer.deploy(JobTracker);
+  deployer.deploy(JobRegistration);
 };
