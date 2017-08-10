@@ -68,14 +68,6 @@ contract JobTracker is SafeMath {
     // SETTERS
     //==========================================
 
-    //TO-DO-WIP
-    function multiTransfer (address[] _bountyHunters, uint256[] _bountyValues) onlyBountyCreator {
-        if (_bountyHunters.length != _bountyValues.length) throw;
-        for(uint256 i=0; i<_bountyHunters.length; i++) {
-            if (!StandardToken(tokenContractAddress).transfer(_tos[i], _values[i])) throw;
-        }
-    }
-
     function acceptWork (address _bountyHunter,  uint256 _amount) onlyBountyCreator {
         token.transfer(_bountyHunter, _amount);
         AcceptWork(msg.sender, _bountyHunter, _amount);
@@ -111,4 +103,15 @@ contract JobTracker is SafeMath {
     //==========================================
 
     function () payable {}
+
+    //==========================================
+    // Work-In-Progress
+    //==========================================
+
+    function multiTransfer (address[] _bountyHunters, uint256[] _bountyValues) onlyBountyCreator {
+        if (_bountyHunters.length != _bountyValues.length) throw;
+        for(uint256 i=0; i<_bountyHunters.length; i++) {
+            if (!StandardToken(tokenContractAddress).transfer(_tos[i], _values[i])) throw;
+        }
+    }
 }
