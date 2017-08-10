@@ -1,9 +1,17 @@
 pragma solidity ^0.4.4;
 
+import "./Token.sol";
 
+contract StandardToken is Token{
+    /* INHERIT 'totalsupply' FROM TOKEN.SOL
 
-contract StandardToken {
     uint public totalSupply;
+
+    function totalBalance() public constant returns (uint) {
+        return totalSupply;
+    }
+    */
+
     function StandardToken (uint _totalSupply) {
         balances[msg.sender] = _totalSupply;
         totalSupply = _totalSupply;
@@ -14,19 +22,18 @@ contract StandardToken {
         //If your token leaves out totalSupply and can issue more tokens as time goes on, you need to check if it doesn't wrap.
         //Replace the if with this one instead.
         //if (balances[msg.sender] >= _value && balances[_to] + _value > balances[_to]) {
-        if (balances[msg.sender] >= _value && _value > 0) {
-            balances[msg.sender] -= _value;
-            balances[_to] += _value;
-            return true;
-        } else { return false; }
+        require(balances[msg.sender] >= _value);
+        balances[msg.sender] -= _value;
+        balances[_to] += _value;
+        return true;
     }
 
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
         //same as above. Replace this line with the following if you want to protect against wrapping uints.
-            balances[_from] -= _value;
-            balances[_to] += _value;
-            return true;
-
+        require(balances[_from] >= _value && allowed[_from][msg.sender] >= _value);
+        balances[_from] -= _value;
+        balances[_to] += _value;
+        return true;
     }
 
     function balanceOf(address _owner) constant returns (uint256 balance) {
@@ -40,10 +47,6 @@ contract StandardToken {
 
     function allowance(address _owner, address _spender) constant returns (uint256 remaining) {
       return allowed[_owner][_spender];
-    }
-
-    function totalBalance() public constant returns (uint) {
-        return totalSupply;
     }
 
     mapping (address => uint256) balances;
