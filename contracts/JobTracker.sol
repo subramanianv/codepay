@@ -12,7 +12,6 @@ contract JobTracker is SafeMath {
     //  SETTERS
     // - tag ACCEPTED github pull requests to token transfers
 
-
     //==========================================
     // VARIABLES
     //==========================================
