@@ -21,10 +21,6 @@ contract StandardToken {
         } else { return false; }
     }
 
-    function multiTransfer (address[] _to, uint256[] _value) returns (bool success) {
-        
-    }
-
     function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
         //same as above. Replace this line with the following if you want to protect against wrapping uints.
             balances[_from] -= _value;
