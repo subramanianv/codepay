@@ -69,7 +69,7 @@ contract JobTracker is SafeMath {
     // SETTERS
     //==========================================
 
-    //TOWIP    
+    //TO-DO-WIP
     function multiTransfer (address[] _bountyHunters, uint256[] _bountyValues) onlyBountyCreator {
         if (_bountyHunters.length != _bountyValues.length) throw;
         for(uint256 i=0; i<_bountyHunters.length; i++) {
