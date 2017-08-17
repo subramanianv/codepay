@@ -47,7 +47,7 @@ contract JobTracker is SafeMath {
         bountyManagers[msg.sender] = true;
         token = StandardToken(_tokenContract);
         tokenContractAddress = _tokenContract;
-        lockBlockNumber = 0;
+        bountyStatus = requestState.Inactive;
     }
 
     //==========================================
@@ -63,16 +63,6 @@ contract JobTracker is SafeMath {
     //==========================================
     // SETTERS
     //==========================================
-
-    function addManager (address _newManager) onlyBountyCreator returns (bool success) {
-        bountyManagers[_newManager] = true;
-        return true;
-    }
-
-    function delManager (address _oldManager) onlyBountyCreator returns (bool success) {
-        bountyManagers[_oldManager] = false;
-        return true;
-    }
 
     function acceptWork (address _bountyHunter,  uint256 _amount) onlyBountyCreator {
         token.transfer(_bountyHunter, _amount);
@@ -109,11 +99,22 @@ contract JobTracker is SafeMath {
     // MISCELLANEOUS
     //==========================================
 
-    function () payable {}
+    function () payable {
+        if (bountyStatus == requestState.Inactive) throw;
+    }
 
     //==========================================
     // Work-In-Progress
     //==========================================
+
+    enum requestState {
+        Inactive,
+        Locked,
+        Unlocked
+    }
+
+    requestState public bountyStatus;
+    uint256 unlockBlockNumber;
 
     struct pullRequestStruct {
         address[] bountHunterAddresses;
@@ -124,18 +125,48 @@ contract JobTracker is SafeMath {
     mapping (byte32 => pullRequestStruct) pullRequests;
 
     modifier checkClaimAllowable () {
-        require(block.number != 0 && this.balance >= lockPayAmount && block.number >= lockBlockNumber);
+        require(bountyStatus == requestState.Unlocked && unlockBlockNumber > lockBlockNumber);
         _;
     }
 
-    function claimBounty (uint256 _bountyToken) checkClaimAllowable {
-
+    modifier onlyBountyManagers () {
+        require(bountyManagers[msg.sender] == true);
+        _;
     }
 
-    function allowClaim () onlyBountyCreator {
-
+    function addManager (address _newManager) onlyBountyCreator returns (bool success) {
+        bountyManagers[_newManager] = true;
+        return true;
     }
 
+    function delManager (address _oldManager) onlyBountyCreator returns (bool success) {
+        bountyManagers[_oldManager] = false;
+        return true;
+    }
+
+    function shareOf (uint256 _tokenAmount) constant returns (uint256) {
+        require (token.balanceOf(msg.sender) >= _tokenAmount);
+        return div(_tokenAmount, token.totalBalance());
+    }
+
+    function claimBounty (uint256 _tokenAmount) checkClaimAllowable {
+        uint256 sendBalance = mul(this.balance, shareOf(msg.sender));
+        require (msg.sender.send(sendBalance));
+        token.approve(msg.sender, bountyCreator, token.balanceOf(_bountyHunter));
+        token.transferFrom(msg.sender, bountyCreator, token.balanceOf(_bountyHunter));
+        return true;
+    }
+
+    function unlockBounty () public onlyBountyCreator {
+        if (bountyStatus == requestState.Inactive) throw;
+        bountyStatus = requestState.Unlocked;
+        unlockBlockNumber = block.number;
+    }
+
+    function lockBounty () public onlyBountyManagers {
+        bountyStatus = requestState.Locked;
+        lockBlockNumber = block.number;
+    }
 
     function multiTransfer (address[] _bountyHunters, uint256[] _bountyValues) onlyBountyCreator {
         if (_bountyHunters.length != _bountyValues.length) throw;
