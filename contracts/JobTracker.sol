@@ -56,17 +56,17 @@ contract JobTracker is SafeMath {
     //==========================================
 
     modifier onlyBountyCreator {
-        require(msg.sender == bountyCreator);
+        require (msg.sender == bountyCreator);
         _;
     }
 
     modifier onlyBountyManagers () {
-        require(bountyManagers[msg.sender] == true);
+        require (bountyManagers[msg.sender] == true);
         _;
     }
 
     modifier checkClaimAllowable () {
-        require(bountyStatus == requestState.Unlocked && unlockBlockNumber > lockBlockNumber);
+        require (bountyStatus == requestState.Unlocked && unlockBlockNumber > lockBlockNumber);
         _;
     }
 
@@ -108,14 +108,24 @@ contract JobTracker is SafeMath {
     //==========================================
 
     function submitBounty (uint256 _tokenAmount, byte32 _pullRequestID) returns (bool success) {
-        pullRequests[_pullRequestID] = pullRequestStruct ({bountyHunter: msg.sender, tokenBountyAmount: _tokenAmount});
+        pullRequests[_pullRequestID] = pullRequestStruct ({
+            bountyHunter: msg.sender,
+            tokenBountyAmount: _tokenAmount
+        });
         SubmitWork (msg.sender, _tokenAmount, _pullRequestID);
         return true;
     }
 
-    function acceptWork (address _bountyHunter, uint256 _amount) onlyBountyManagers returns (bool success) {
-        requre (token.transfer(_bountyHunter, _amount));
-        bountyStatus = requestState.Locked;
+    function acceptWork (address _bountyHunter, uint256 _tokenAmount, byte32 _pullRequestID)
+        onlyBountyManagers
+        returns (bool success)
+    {
+        if (pullRequests[_pullRequestID].bountyHunter != _bountyHunter || pullRequests[_pullRequestID].tokenBountyAmount != _tokenAmount]) throw;
+
+        if (bountyStatus == requestState.Inactive) {
+            bountyStatus = requestState.Locked;
+        }
+        require (token.transfer(_bountyHunter, _amount));
         AcceptWork(msg.sender, _bountyHunter, _amount);
         return true;
     }
@@ -127,7 +137,7 @@ contract JobTracker is SafeMath {
         return true;
     }
 
-    function unlockBounty () public onlyBountyCreator returns (bool success) {
+    function unlockBounty () public onlyBountyManagers returns (bool success) {
         if (bountyStatus == requestState.Inactive) throw;
         bountyStatus = requestState.Unlocked;
         unlockBlockNumber = block.number;
@@ -157,7 +167,7 @@ contract JobTracker is SafeMath {
     }
 
     function delManager (address _oldManager) onlyBountyCreator returns (bool success) {
-        bountyManagers[_oldManager] = false;
+        delete bountyManagers[_oldManager];
         ManagerDeleted (_oldManager);
         return true;
     }
